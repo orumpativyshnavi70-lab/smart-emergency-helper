@@ -114,6 +114,8 @@ function saveContact() {
     }
 
     alert("Trusted contact saved successfully!");
+    document.querySelector('#contacts input[type="text"]').value = "";
+document.querySelector('#contacts input[type="tel"]').value = "";
 }
         </script>
     </body>
