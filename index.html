@@ -18,19 +18,37 @@
                 color : white ;
                 padding : 15px 30px ;
                 font-size: 20px;
+                margin: 10px;
                 border-radius: 10px;
                 box-shadow: 0 4px 8px gray;
-                margin: 10px;
+                font-weight: bold;
             }
             button {
+                width: 250px;
+                padding: 15px;
+                font-size: 17px;
+                border-radius: 10px;
                 margin: 10px;
                 cursor: pointer;
+                transition:0.2s;
             }
             button:hover {
                 transform:scale(1.05);
             }
             h1 {
             font-size: 32px;
+            color: #d32f2f;
+        }
+        @media (max-width: 600px){
+            button {
+                width: 90%;
+            }
+        }
+        input {
+            width: 90%;
+            padding:12px;
+            margin: 8px;
+            border-radius: 8px;
         }
         </style>
     </head>
@@ -43,8 +61,12 @@
         <button
          onclick="window.open('https://www.google.com/maps/search/hospitals+near+me')">🏥 Find Nearby Hospital</button>
         <button onclick="alert('Please Contact Your Trusted Person')">👥 Trusted Contacts</button>
+        <input type="text" placeholder="Enter trusted person's name">
+        <input type="tel" placeholder="Enter phone number">
+        <button onclick="alert('Trusted contact saved successfully!')"> Save Contact</button>
         <p>Add a trusted person for emergencies</p>
         <button onclick="alert(' Stay Calm.Move to a safe place and contact emergency services if needed.')">🩹 Safety Guidance</button>
+        <p>Stay calm and move to a safe place.</p>
         <p>Get simple safety guidance</p>
         <h1>🚨 Smart Emergency Helper</h1>
         <h2>Quick Help When You Need It</h2>
