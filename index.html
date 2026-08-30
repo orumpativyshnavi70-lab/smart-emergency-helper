@@ -60,10 +60,16 @@
         <p> Get quick help in an emergency </p>
         <button
          onclick="window.open('https://www.google.com/maps/search/hospitals+near+me')">🏥 Find Nearby Hospital</button>
-        <button onclick="alert('Please Contact Your Trusted Person')">👥 Trusted Contacts</button>
-        <input type="text" placeholder="Enter trusted person's name">
-        <input type="tel" placeholder="Enter phone number">
-        <button onclick="alert('Trusted contact saved successfully!')"> Save Contact</button>
+        <button 
+        onclick="document.getElementById('contacts').style.display='block'">👥Trusted Contacts</button>
+        <div id="contacts" 
+        style="display:none;">
+        <input type="text"
+        placeholder="Enter trusted person's name">
+        <input type="tel"
+        placeholder="Enter phone number">
+        <button onclick="alert('Trusted contact saved successfully!')">Save Contact</button>
+</div>
         <p>Add a trusted person for emergencies</p>
         <button onclick="alert(' Stay Calm.Move to a safe place and contact emergency services if needed.')">🩹 Safety Guidance</button>
         <p>Stay calm and move to a safe place.</p>
@@ -79,6 +85,9 @@
                     + position.coords.latitude +","
                      + position.coords.longitude);
                 });
+            }
+            function showContacts() {
+                document.getElementById("Contacts").style.display = "block;"
             }
         </script>
     </body>
