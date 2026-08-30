@@ -1,608 +1,1235 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Emergency Helper</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart Emergency Helper</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+<style>
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f7fb;
-            color: #222;
-        }
+*{
+    box-sizing:border-box;
+}
 
-        header {
-            background: white;
-            text-align: center;
-            padding: 30px 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-        }
+html{
+    scroll-behavior:smooth;
+}
 
-        header h1 {
-            color: #d32f2f;
-            margin: 0 0 8px;
-            font-size: 32px;
-        }
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f4f7fb;
+    color:#222;
+    transition:.3s;
+}
 
-        header p {
-            color: #666;
-            margin: 0;
-        }
+/* WELCOME SCREEN */
 
-        .container {
-            max-width: 950px;
-            margin: 25px auto;
-            padding: 0 20px;
-        }
+#welcomeScreen{
+    position:fixed;
+    inset:0;
+    background:#d32f2f;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    z-index:9999;
+    transition:opacity .5s;
+}
 
-        .emergency {
-            background: #d32f2f;
-            color: white;
-            padding: 28px;
-            border-radius: 18px;
-            text-align: center;
-            margin-bottom: 22px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
-        }
+.welcomeContent{
+    width:90%;
+    max-width:500px;
+}
 
-        .emergency h2 {
-            margin-top: 0;
-        }
+.logo{
+    width:110px;
+    height:110px;
+    margin:auto;
+    border-radius:50%;
+    background:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:55px;
+    box-shadow:0 8px 25px rgba(0,0,0,.25);
+}
 
-        .emergency button {
-            background: white;
-            color: #d32f2f;
-            font-weight: bold;
-        }
+.welcomeContent h1{
+    font-size:34px;
+    margin:25px 0 10px;
+}
 
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 18px;
-        }
+.welcomeContent p{
+    font-size:17px;
+    line-height:1.6;
+}
 
-        .card {
-            background: white;
-            padding: 22px;
-            border-radius: 16px;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-        }
+.startBtn{
+    background:white;
+    color:#d32f2f;
+    border:none;
+    border-radius:12px;
+    padding:15px 35px;
+    margin-top:20px;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+}
 
-        .card h3 {
-            margin-top: 0;
-            font-size: 20px;
-        }
+/* HEADER */
 
-        .card p {
-            color: #666;
-            line-height: 1.5;
-        }
+header{
+    background:white;
+    padding:25px 20px;
+    text-align:center;
+    box-shadow:0 2px 12px rgba(0,0,0,.08);
+    position:sticky;
+    top:0;
+    z-index:100;
+}
 
-        button {
-            width: 100%;
-            padding: 13px;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            background: #eeeeee;
-            margin-top: 8px;
-            transition: 0.2s;
-        }
+header h1{
+    margin:0 0 8px;
+    color:#d32f2f;
+    font-size:32px;
+}
 
-        button:hover {
-            transform: translateY(-2px);
-        }
+header p{
+    margin:0;
+    color:#666;
+}
 
-        input,
-        select {
-            width: 100%;
-            padding: 12px;
-            margin: 7px 0;
-            border: 1px solid #ccc;
-            border-radius: 9px;
-            font-size: 15px;
-        }
+nav{
+    margin-top:18px;
+}
 
-        .hidden {
-            display: none;
-        }
+nav button{
+    width:auto;
+    margin:4px;
+    padding:9px 15px;
+    font-size:14px;
+}
 
-        .result {
-            margin-top: 12px;
-            padding: 13px;
-            background: #f1f5f9;
-            border-radius: 10px;
-            line-height: 1.7;
-        }
+/* CONTAINER */
 
-        .contact {
-            background: #f1f5f9;
-            padding: 12px;
-            border-radius: 10px;
-            margin-top: 10px;
-        }
+.container{
+    max-width:950px;
+    margin:25px auto;
+    padding:0 20px;
+}
 
-        .small-btn {
-            width: 48%;
-            display: inline-block;
-            font-size: 14px;
-            padding: 10px;
-        }
+/* EMERGENCY */
 
-        .danger {
-            background: #ffe5e5;
-            color: #c62828;
-        }
+.emergency{
+    background:#d32f2f;
+    color:white;
+    padding:30px;
+    border-radius:18px;
+    text-align:center;
+    margin-bottom:22px;
+    box-shadow:0 6px 18px rgba(0,0,0,.15);
+}
 
-        footer {
-            text-align: center;
-            padding: 25px;
-            color: #777;
-            font-size: 14px;
-        }
+.emergency h2{
+    margin-top:0;
+}
 
-        @media (max-width: 650px) {
-            .grid {
-                grid-template-columns: 1fr;
-            }
+.emergency-btn{
+    background:white;
+    color:#d32f2f;
+    font-weight:bold;
+    font-size:17px;
+}
 
-            header h1 {
-                font-size: 26px;
-            }
+.pulse{
+    animation:pulse 1.5s infinite;
+}
 
-            .container {
-                padding: 0 15px;
-            }
-        }
-    </style>
+@keyframes pulse{
+
+    0%{
+        box-shadow:0 0 0 0 rgba(255,255,255,.6);
+    }
+
+    70%{
+        box-shadow:0 0 0 12px rgba(255,255,255,0);
+    }
+
+    100%{
+        box-shadow:0 0 0 0 rgba(255,255,255,0);
+    }
+
+}
+
+/* GRID */
+
+.grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+}
+
+/* CARD */
+
+.card{
+    background:white;
+    padding:22px;
+    border-radius:16px;
+    box-shadow:0 4px 14px rgba(0,0,0,.08);
+    transition:.2s;
+}
+
+.card:hover{
+    transform:translateY(-3px);
+}
+
+.card h3{
+    margin-top:0;
+    font-size:20px;
+}
+
+.card p{
+    color:#666;
+    line-height:1.5;
+}
+
+/* BUTTON */
+
+button{
+    width:100%;
+    padding:13px;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+    background:#eeeeee;
+    margin-top:8px;
+    transition:.2s;
+}
+
+button:hover{
+    transform:translateY(-2px);
+}
+
+/* INPUT */
+
+input,
+select{
+    width:100%;
+    padding:12px;
+    margin:7px 0;
+    border:1px solid #ccc;
+    border-radius:9px;
+    font-size:15px;
+}
+
+.hidden{
+    display:none;
+}
+
+.result{
+    margin-top:12px;
+    padding:13px;
+    background:#f1f5f9;
+    border-radius:10px;
+    line-height:1.7;
+}
+
+.contact{
+    background:#f1f5f9;
+    padding:13px;
+    border-radius:10px;
+    margin-top:10px;
+}
+
+.small-btn{
+    width:48%;
+    display:inline-block;
+    font-size:14px;
+    padding:10px;
+}
+
+.danger{
+    background:#ffe5e5;
+    color:#c62828;
+}
+
+/* ABOUT */
+
+.about{
+    margin-top:22px;
+    background:white;
+    padding:25px;
+    border-radius:16px;
+    box-shadow:0 4px 14px rgba(0,0,0,.08);
+}
+
+.about h2{
+    color:#d32f2f;
+}
+
+/* FOOTER */
+
+footer{
+    text-align:center;
+    padding:30px 20px;
+    color:#777;
+    font-size:14px;
+}
+
+/* DARK MODE */
+
+body.dark{
+    background:#121212;
+    color:#eeeeee;
+}
+
+body.dark header,
+body.dark .card,
+body.dark .about{
+    background:#1e1e1e;
+}
+
+body.dark header p,
+body.dark .card p{
+    color:#bbbbbb;
+}
+
+body.dark .result,
+body.dark .contact{
+    background:#2a2a2a;
+}
+
+body.dark input,
+body.dark select{
+    background:#2a2a2a;
+    color:white;
+    border-color:#555;
+}
+
+body.dark button{
+    background:#333;
+    color:white;
+}
+
+body.dark .emergency button{
+    background:white;
+    color:#d32f2f;
+}
+
+/* MOBILE */
+
+@media(max-width:650px){
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    header h1{
+        font-size:26px;
+    }
+
+    .container{
+        padding:0 15px;
+    }
+
+    nav button{
+        width:45%;
+    }
+
+    .welcomeContent h1{
+        font-size:28px;
+    }
+
+}
+
+</style>
 </head>
 
 <body>
 
-<header>
-    <h1>🚨 Smart Emergency Helper</h1>
-    <p>Quick help and safety support when you need it</p>
-</header>
+<!-- WELCOME SCREEN -->
 
+<div id="welcomeScreen">
 
-<div class="container">
+    <div class="welcomeContent">
 
-    <!-- EMERGENCY -->
-    <div class="emergency">
-        <h2>🚨 Emergency Assistance</h2>
+        <div class="logo">
+            🚨
+        </div>
+
+        <h1>
+            Smart Emergency Helper
+        </h1>
 
         <p>
-            For immediate emergency assistance, contact emergency services.
+            Quick access to emergency assistance,
+            nearby services, trusted contacts and
+            safety guidance.
         </p>
 
-        <a href="tel:112">
-            <button onclick="alert('Emergency Number: 112')">
-                🚨 Call Emergency 112
-            </button>
-        </a>
-    </div>
+        <button
+            class="startBtn"
+            onclick="startApp()">
 
+            🚀 Get Started
 
-    <div class="grid">
-
-        <!-- HOSPITAL -->
-        <div class="card">
-            <h3>🏥 Nearby Hospital</h3>
-
-            <p>
-                Find hospitals near your location.
-            </p>
-
-            <button onclick="findHospital()">
-                🏥 Find Nearby Hospital
-            </button>
-        </div>
-
-
-        <!-- POLICE -->
-        <div class="card">
-            <h3>👮 Police Station</h3>
-
-            <p>
-                Find police stations near your location.
-            </p>
-
-            <button onclick="findPolice()">
-                👮 Find Nearby Police
-            </button>
-        </div>
-
-
-        <!-- PHARMACY -->
-        <div class="card">
-            <h3>💊 Pharmacy</h3>
-
-            <p>
-                Find pharmacies near your location.
-            </p>
-
-            <button onclick="findPharmacy()">
-                💊 Find Nearby Pharmacy
-            </button>
-        </div>
-
-
-        <!-- LOCATION -->
-        <div class="card">
-            <h3>📍 My Location</h3>
-
-            <p>
-                Open your current location on Google Maps.
-            </p>
-
-            <button onclick="getLocation()">
-                📍 Find My Location
-            </button>
-        </div>
-
-
-        <!-- TRUSTED CONTACTS -->
-        <div class="card">
-
-            <h3>👥 Trusted Contacts</h3>
-
-            <p>
-                Save trusted people for emergency situations.
-            </p>
-
-            <button onclick="showContactForm()">
-                ➕ Add Trusted Contact
-            </button>
-
-            <div id="contactForm" class="hidden">
-
-                <input
-                    type="text"
-                    id="contactName"
-                    placeholder="Enter person's name">
-
-                <input
-                    type="tel"
-                    id="contactPhone"
-                    placeholder="Enter phone number">
-
-                <button onclick="saveContact()">
-                    💾 Save Contact
-                </button>
-
-            </div>
-
-            <div id="contactsList"></div>
-
-        </div>
-
-
-        <!-- SAFETY GUIDANCE -->
-        <div class="card">
-
-            <h3>🩹 Safety Guidance</h3>
-
-            <p>
-                Select an emergency type for simple guidance.
-            </p>
-
-            <select id="safetyType" onchange="showGuidance()">
-
-                <option value="">
-                    Select emergency type
-                </option>
-
-                <option value="accident">
-                    🚗 Road Accident
-                </option>
-
-                <option value="fire">
-                    🔥 Fire Emergency
-                </option>
-
-                <option value="flood">
-                    🌊 Flood
-                </option>
-
-                <option value="medical">
-                    🏥 Medical Emergency
-                </option>
-
-                <option value="electrical">
-                    ⚡ Electrical Emergency
-                </option>
-
-            </select>
-
-            <div id="guidance" class="result hidden"></div>
-
-        </div>
+        </button>
 
     </div>
 
 </div>
 
 
+<!-- HEADER -->
+
+<header id="home">
+
+    <h1>
+        🚨 Smart Emergency Helper
+    </h1>
+
+    <p>
+        Quick help and safety support when you need it
+    </p>
+
+    <nav>
+
+        <button onclick="goHome()">
+            🏠 Home
+        </button>
+
+        <button onclick="goAbout()">
+            ℹ️ About
+        </button>
+
+        <button onclick="toggleDarkMode()">
+            🌙 Dark Mode
+        </button>
+
+    </nav>
+
+</header>
+
+
+<div class="container">
+
+
+<!-- EMERGENCY -->
+
+<div class="emergency">
+
+    <h2>
+        🚨 Emergency Assistance
+    </h2>
+
+    <p>
+        For immediate emergency assistance,
+        contact emergency services.
+    </p>
+
+    <button
+        class="emergency-btn pulse"
+        onclick="callEmergency()">
+
+        🚨 Call Emergency 112
+
+    </button>
+
+</div>
+
+
+<!-- FEATURES -->
+
+<div class="grid">
+
+
+<!-- HOSPITAL -->
+
+<div class="card">
+
+    <h3>
+        🏥 Nearby Hospital
+    </h3>
+
+    <p>
+        Find hospitals near your location.
+    </p>
+
+    <button onclick="findHospital()">
+
+        🏥 Find Nearby Hospital
+
+    </button>
+
+</div>
+
+
+<!-- POLICE -->
+
+<div class="card">
+
+    <h3>
+        👮 Police Station
+    </h3>
+
+    <p>
+        Find police stations near you.
+    </p>
+
+    <button onclick="findPolice()">
+
+        👮 Find Nearby Police
+
+    </button>
+
+</div>
+
+
+<!-- PHARMACY -->
+
+<div class="card">
+
+    <h3>
+        💊 Pharmacy
+    </h3>
+
+    <p>
+        Find pharmacies near your location.
+    </p>
+
+    <button onclick="findPharmacy()">
+
+        💊 Find Nearby Pharmacy
+
+    </button>
+
+</div>
+
+
+<!-- LOCATION -->
+
+<div class="card">
+
+    <h3>
+        📍 My Location
+    </h3>
+
+    <p>
+        Open your current location on Google Maps.
+    </p>
+
+    <button onclick="getLocation()">
+
+        📍 Find My Location
+
+    </button>
+
+</div>
+
+
+<!-- TRUSTED CONTACTS -->
+
+<div class="card">
+
+    <h3>
+        👥 Trusted Contacts
+    </h3>
+
+    <p>
+        Save trusted people for emergency situations.
+    </p>
+
+    <button onclick="showContactForm()">
+
+        ➕ Add Trusted Contact
+
+    </button>
+
+
+    <div id="contactForm" class="hidden">
+
+        <input
+            type="text"
+            id="contactName"
+            placeholder="Enter person's name">
+
+        <input
+            type="tel"
+            id="contactPhone"
+            placeholder="Enter phone number">
+
+        <button onclick="saveContact()">
+
+            💾 Save Contact
+
+        </button>
+
+    </div>
+
+
+    <div id="contactsList"></div>
+
+</div>
+
+
+<!-- SAFETY GUIDANCE -->
+
+<div class="card">
+
+    <h3>
+        🩹 Safety Guidance
+    </h3>
+
+    <p>
+        Select an emergency type for guidance.
+    </p>
+
+    <select
+        id="safetyType"
+        onchange="showGuidance()">
+
+        <option value="">
+            Select emergency type
+        </option>
+
+        <option value="accident">
+            🚗 Road Accident
+        </option>
+
+        <option value="fire">
+            🔥 Fire Emergency
+        </option>
+
+        <option value="flood">
+            🌊 Flood
+        </option>
+
+        <option value="medical">
+            🏥 Medical Emergency
+        </option>
+
+        <option value="electrical">
+            ⚡ Electrical Emergency
+        </option>
+
+    </select>
+
+
+    <div
+        id="guidance"
+        class="result hidden">
+    </div>
+
+</div>
+
+
+</div>
+
+
+<!-- ABOUT -->
+
+<section
+    id="about"
+    class="about">
+
+    <h2>
+        ℹ️ About Smart Emergency Helper
+    </h2>
+
+    <p>
+        Smart Emergency Helper is a simple
+        web-based emergency assistance tool
+        designed to provide quick access to
+        important emergency resources.
+    </p>
+
+    <p>
+        It helps users find nearby hospitals,
+        police stations and pharmacies, view
+        their location, save trusted contacts
+        and access basic safety guidance.
+    </p>
+
+    <p>
+        <strong>Important:</strong>
+        This website is an assistance tool and
+        does not replace professional emergency
+        services.
+    </p>
+
+</section>
+
+
+</div>
+
+
+<!-- FOOTER -->
+
 <footer>
-    Smart Emergency Helper • Stay Safe • Get Help Quickly
+
+    <strong>🚨 Smart Emergency Helper</strong>
+
+    <br><br>
+
+    Stay Safe • Get Help Quickly
+
+    <br><br>
+
+    <small>
+        Developed by
+        <strong>Orumpati Vyshnavi</strong>
+    </small>
+
 </footer>
 
 
 <script>
 
-    /* HOSPITAL */
-    function findHospital() {
-        window.open(
-            "https://www.google.com/maps/search/hospitals+near+me",
-            "_blank"
-        );
-    }
+/* START APP */
+
+function startApp(){
+
+    const screen =
+        document.getElementById("welcomeScreen");
+
+    screen.style.opacity = "0";
+
+    setTimeout(function(){
+
+        screen.style.display = "none";
+
+    },500);
+
+}
 
 
-    /* POLICE */
-    function findPolice() {
-        window.open(
-            "https://www.google.com/maps/search/police+stations+near+me",
-            "_blank"
-        );
-    }
+/* EMERGENCY CALL */
+
+function callEmergency(){
+
+    alert("🚨 Emergency Number: 112");
+
+    window.location.href = "tel:112";
+
+}
 
 
-    /* PHARMACY */
-    function findPharmacy() {
-        window.open(
-            "https://www.google.com/maps/search/pharmacy+near+me",
-            "_blank"
-        );
-    }
+/* HOME */
+
+function goHome(){
+
+    window.scrollTo({
+
+        top:0,
+
+        behavior:"smooth"
+
+    });
+
+}
 
 
-    /* LOCATION */
-    function getLocation() {
+/* ABOUT */
 
-        if (!navigator.geolocation) {
-            alert("Location is not supported by your browser.");
-            return;
-        }
+function goAbout(){
 
-        navigator.geolocation.getCurrentPosition(
+    document
+        .getElementById("about")
+        .scrollIntoView({
 
-            function(position) {
+            behavior:"smooth"
 
-                const latitude =
-                    position.coords.latitude;
-
-                const longitude =
-                    position.coords.longitude;
-
-                window.open(
-                    "https://www.google.com/maps?q=" +
-                    latitude + "," + longitude,
-                    "_blank"
-                );
-            },
-
-            function(error) {
-
-                if (error.code === 1) {
-                    alert(
-                        "Location permission is blocked. Please allow location permission and try again."
-                    );
-                }
-
-                else if (error.code === 2) {
-                    alert(
-                        "Location is unavailable. Please turn on GPS and try again."
-                    );
-                }
-
-                else {
-                    alert(
-                        "Unable to get your location. Please try again."
-                    );
-                }
-            }
-        );
-    }
-
-
-    /* SHOW CONTACT FORM */
-    function showContactForm() {
-
-        document
-            .getElementById("contactForm")
-            .classList.remove("hidden");
-    }
-
-
-    /* SAVE CONTACT */
-    function saveContact() {
-
-        const name =
-            document.getElementById("contactName").value.trim();
-
-        const phone =
-            document.getElementById("contactPhone").value.trim();
-
-        if (name === "" || phone === "") {
-            alert("Please enter name and phone number.");
-            return;
-        }
-
-        let contacts =
-            JSON.parse(
-                localStorage.getItem("trustedContacts") || "[]"
-            );
-
-        contacts.push({
-            name: name,
-            phone: phone
         });
 
-        localStorage.setItem(
-            "trustedContacts",
-            JSON.stringify(contacts)
-        );
+}
 
-        document.getElementById("contactName").value = "";
-        document.getElementById("contactPhone").value = "";
+
+/* DARK MODE */
+
+function toggleDarkMode(){
+
+    document.body.classList.toggle("dark");
+
+    const isDark =
+        document.body.classList.contains("dark");
+
+    localStorage.setItem(
+
+        "darkMode",
+
+        isDark ? "on" : "off"
+
+    );
+
+}
+
+
+/* LOAD */
+
+window.addEventListener(
+
+    "load",
+
+    function(){
+
+        if(
+            localStorage.getItem("darkMode")
+            === "on"
+        ){
+
+            document.body.classList.add("dark");
+
+        }
 
         displayContacts();
 
-        alert("Trusted contact saved successfully!");
+    }
+
+);
+
+
+/* HOSPITAL */
+
+function findHospital(){
+
+    window.open(
+
+        "https://www.google.com/maps/search/hospitals+near+me",
+
+        "_blank"
+
+    );
+
+}
+
+
+/* POLICE */
+
+function findPolice(){
+
+    window.open(
+
+        "https://www.google.com/maps/search/police+stations+near+me",
+
+        "_blank"
+
+    );
+
+}
+
+
+/* PHARMACY */
+
+function findPharmacy(){
+
+    window.open(
+
+        "https://www.google.com/maps/search/pharmacy+near+me",
+
+        "_blank"
+
+    );
+
+}
+
+
+/* LOCATION */
+
+function getLocation(){
+
+    if(!navigator.geolocation){
+
+        alert(
+            "Location is not supported by your browser."
+        );
+
+        return;
+
     }
 
 
-    /* DISPLAY CONTACTS */
-    function displayContacts() {
+    navigator.geolocation.getCurrentPosition(
 
-        const contacts =
-            JSON.parse(
-                localStorage.getItem("trustedContacts") || "[]"
+        function(position){
+
+            const latitude =
+                position.coords.latitude;
+
+            const longitude =
+                position.coords.longitude;
+
+
+            window.open(
+
+                "https://www.google.com/maps?q=" +
+                latitude + "," +
+                longitude,
+
+                "_blank"
+
             );
 
-        const list =
-            document.getElementById("contactsList");
+        },
 
-        list.innerHTML = "";
 
-        contacts.forEach(function(contact, index) {
+        function(error){
+
+            if(error.code === 1){
+
+                alert(
+                    "Location permission is blocked. Please allow location permission and try again."
+                );
+
+            }
+
+            else if(error.code === 2){
+
+                alert(
+                    "Location is unavailable. Please turn on GPS and try again."
+                );
+
+            }
+
+            else{
+
+                alert(
+                    "Unable to get your location. Please try again."
+                );
+
+            }
+
+        }
+
+    );
+
+}
+
+
+/* CONTACT FORM */
+
+function showContactForm(){
+
+    document
+        .getElementById("contactForm")
+        .classList.remove("hidden");
+
+}
+
+
+/* SAVE CONTACT */
+
+function saveContact(){
+
+    const name =
+        document
+        .getElementById("contactName")
+        .value
+        .trim();
+
+
+    const phone =
+        document
+        .getElementById("contactPhone")
+        .value
+        .trim();
+
+
+    if(
+        name === "" ||
+        phone === ""
+    ){
+
+        alert(
+            "Please enter name and phone number."
+        );
+
+        return;
+
+    }
+
+
+    let contacts =
+        JSON.parse(
+
+            localStorage.getItem(
+                "trustedContacts"
+            ) || "[]"
+
+        );
+
+
+    contacts.push({
+
+        name:name,
+
+        phone:phone
+
+    });
+
+
+    localStorage.setItem(
+
+        "trustedContacts",
+
+        JSON.stringify(contacts)
+
+    );
+
+
+    document
+        .getElementById("contactName")
+        .value = "";
+
+
+    document
+        .getElementById("contactPhone")
+        .value = "";
+
+
+    displayContacts();
+
+
+    alert(
+        "Trusted contact saved successfully!"
+    );
+
+}
+
+
+/* DISPLAY CONTACTS */
+
+function displayContacts(){
+
+    const contacts =
+        JSON.parse(
+
+            localStorage.getItem(
+                "trustedContacts"
+            ) || "[]"
+
+        );
+
+
+    const list =
+        document.getElementById(
+            "contactsList"
+        );
+
+
+    list.innerHTML = "";
+
+
+    contacts.forEach(
+
+        function(contact,index){
 
             const div =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
-            div.className = "contact";
+
+            div.className =
+                "contact";
+
 
             div.innerHTML =
-                "👤 <strong>" + contact.name + "</strong><br>" +
-                "📞 " + contact.phone + "<br>" +
 
-                '<button class="small-btn" onclick="callContact(' +
-                index +
-                ')">📞 Call</button>' +
+                "👤 <strong>" +
+                escapeHTML(contact.name) +
+                "</strong><br>" +
 
-                '<button class="small-btn danger" onclick="deleteContact(' +
+                "📞 " +
+                escapeHTML(contact.phone) +
+                "<br>" +
+
+                '<button class="small-btn" ' +
+                'onclick="callContact(' +
                 index +
-                ')">🗑️ Delete</button>';
+                ')">' +
+
+                '📞 Call</button>' +
+
+                '<button class="small-btn danger" ' +
+                'onclick="deleteContact(' +
+                index +
+                ')">' +
+
+                '🗑️ Delete</button>';
+
 
             list.appendChild(div);
-        });
-    }
 
-
-    /* CALL CONTACT */
-    function callContact(index) {
-
-        const contacts =
-            JSON.parse(
-                localStorage.getItem("trustedContacts") || "[]"
-            );
-
-        if (contacts[index]) {
-
-            window.location.href =
-                "tel:" + contacts[index].phone;
         }
-    }
+
+    );
+
+}
 
 
-    /* DELETE CONTACT */
-    function deleteContact(index) {
+/* SAFE TEXT */
 
-        let contacts =
-            JSON.parse(
-                localStorage.getItem("trustedContacts") || "[]"
-            );
+function escapeHTML(text){
 
-        contacts.splice(index, 1);
+    const div =
+        document.createElement("div");
 
-        localStorage.setItem(
-            "trustedContacts",
-            JSON.stringify(contacts)
+    div.textContent = text;
+
+    return div.innerHTML;
+
+}
+
+
+/* CALL CONTACT */
+
+function callContact(index){
+
+    const contacts =
+        JSON.parse(
+
+            localStorage.getItem(
+                "trustedContacts"
+            ) || "[]"
+
         );
 
-        displayContacts();
+
+    if(contacts[index]){
+
+        window.location.href =
+            "tel:" +
+            contacts[index].phone;
+
+    }
+
+}
+
+
+/* DELETE CONTACT */
+
+function deleteContact(index){
+
+    let contacts =
+        JSON.parse(
+
+            localStorage.getItem(
+                "trustedContacts"
+            ) || "[]"
+
+        );
+
+
+    contacts.splice(index,1);
+
+
+    localStorage.setItem(
+
+        "trustedContacts",
+
+        JSON.stringify(contacts)
+
+    );
+
+
+    displayContacts();
+
+}
+
+
+/* SAFETY GUIDANCE */
+
+function showGuidance(){
+
+    const type =
+        document
+        .getElementById("safetyType")
+        .value;
+
+
+    const guidance =
+        document.getElementById(
+            "guidance"
+        );
+
+
+    if(type === ""){
+
+        guidance.classList.add("hidden");
+
+        guidance.innerHTML = "";
+
+        return;
+
     }
 
 
-    /* SAFETY GUIDANCE */
-    function showGuidance() {
+    guidance.classList.remove("hidden");
 
-        const type =
-            document.getElementById("safetyType").value;
 
-        const guidance =
-            document.getElementById("guidance");
+    if(type === "accident"){
 
-        if (type === "") {
-            guidance.classList.add("hidden");
-            guidance.innerHTML = "";
-            return;
-        }
+        guidance.innerHTML =
+            "<strong>🚗 Road Accident</strong><br>" +
+            "• Stay calm and move to a safe location if possible.<br>" +
+            "• Contact emergency services when necessary.<br>" +
+            "• Avoid putting yourself in further danger.";
 
-        guidance.classList.remove("hidden");
-
-        if (type === "accident") {
-
-            guidance.innerHTML =
-                "<strong>🚗 Road Accident</strong><br>" +
-                "• Stay calm and move to a safe location if possible.<br>" +
-                "• Contact emergency services when necessary.<br>" +
-                "• Avoid putting yourself in further danger.";
-        }
-
-        else if (type === "fire") {
-
-            guidance.innerHTML =
-                "<strong>🔥 Fire Emergency</strong><br>" +
-                "• Move away from the fire and smoke.<br>" +
-                "• Use a safe exit and follow emergency instructions.<br>" +
-                "• Contact emergency services.";
-        }
-
-        else if (type === "flood") {
-
-            guidance.innerHTML =
-                "<strong>🌊 Flood</strong><br>" +
-                "• Move to higher, safer ground.<br>" +
-                "• Avoid walking or driving through flood water.<br>" +
-                "• Follow local emergency instructions.";
-        }
-
-        else if (type === "medical") {
-
-            guidance.innerHTML =
-                "<strong>🏥 Medical Emergency</strong><br>" +
-                "• Stay calm and seek immediate help.<br>" +
-                "• Contact emergency services when needed.<br>" +
-                "• Stay with the person until help arrives.";
-        }
-
-        else if (type === "electrical") {
-
-            guidance.innerHTML =
-                "<strong>⚡ Electrical Emergency</strong><br>" +
-                "• Keep away from exposed electrical sources.<br>" +
-                "• Do not touch a person who may still be in contact with electricity.<br>" +
-                "• Contact emergency services and qualified professionals.";
-        }
     }
 
 
-    /* LOAD SAVED CONTACTS */
-    window.onload = function() {
-        displayContacts();
-    };
+    else if(type === "fire"){
+
+        guidance.innerHTML =
+            "<strong>🔥 Fire Emergency</strong><br>" +
+            "• Move away from fire and smoke.<br>" +
+            "• Use a safe exit.<br>" +
+            "• Contact emergency services.";
+
+    }
+
+
+    else if(type === "flood"){
+
+        guidance.innerHTML =
+            "<strong>🌊 Flood</strong><br>" +
+            "• Move to higher, safer ground.<br>" +
+            "• Avoid walking or driving through flood water.<br>" +
+            "• Follow local emergency instructions.";
+
+    }
+
+
+    else if(type === "medical"){
+
+        guidance.innerHTML =
+            "<strong>🏥 Medical Emergency</strong><br>" +
+            "• Stay calm and seek immediate help.<br>" +
+            "• Contact emergency services when needed.<br>" +
+            "• Stay with the person until help arrives.";
+
+    }
+
+
+    else if(type === "electrical"){
+
+        guidance.innerHTML =
+            "<strong>⚡ Electrical Emergency</strong><br>" +
+            "• Keep away from exposed electrical sources.<br>" +
+            "• Do not touch a person who may still be in contact with electricity.<br>" +
+            "• Contact emergency services and qualified professionals.";
+
+    }
+
+}
 
 </script>
 
 </body>
+
 </html>
