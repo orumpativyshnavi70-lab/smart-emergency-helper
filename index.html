@@ -1,122 +1,368 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>Smart Emergency Helper
-        </title>
-        <meta name="viewport"
-        content="width=device-width,initial-scale=1.0">
-        <style>
-            body {
-                text-align:center;
-                font-family:Arial;
-                font-size: 18px;
-                padding: 30px;
-                background-color:#f5f5f5;
-            }
-            .emergency {
-                background-color : red ;
-                color : white ;
-                padding : 15px 30px ;
-                font-size: 20px;
-                margin: 10px;
-                border-radius: 10px;
-                box-shadow: 0 4px 8px gray;
-                font-weight: bold;
-            }
-            button {
-                width: 250px;
-                padding: 15px;
-                font-size: 17px;
-                border-radius: 10px;
-                margin: 10px;
-                cursor: pointer;
-                transition:0.2s;
-            }
-            button:hover {
-                transform:scale(1.05);
-            }
-            h1 {
-            font-size: 32px;
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Emergency Helper</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #222;
+        }
+
+        header {
+            text-align: center;
+            background: white;
+            padding: 30px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        header h1 {
             color: #d32f2f;
+            font-size: 32px;
+            margin: 0 0 8px;
         }
-        @media (max-width: 600px){
-            button {
-                width: 90%;
-            }
+
+        header p {
+            color: #666;
+            margin: 0;
         }
+
+        .container {
+            max-width: 900px;
+            margin: 25px auto;
+            padding: 0 20px;
+        }
+
+        .emergency {
+            background: #d32f2f;
+            color: white;
+            text-align: center;
+            padding: 25px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+
+        .emergency h2 {
+            margin-top: 0;
+        }
+
+        .emergency button {
+            background: white;
+            color: #d32f2f;
+            font-weight: bold;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .card {
+            background: white;
+            padding: 22px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .card h3 {
+            margin-top: 0;
+        }
+
+        .card p {
+            color: #666;
+            line-height: 1.5;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 9px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            background: #eeeeee;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
         input {
-            width: 90%;
-            padding:12px;
-            margin: 8px;
+            width: 100%;
+            padding: 12px;
+            margin: 7px 0;
+            border: 1px solid #ccc;
             border-radius: 8px;
+            font-size: 15px;
         }
-        </style>
-    </head>
-    <body>
-        <a href="tel:112">
-        <button class="emergency" onclick="alert('Emergency Number:112')">🚨Emergency </button>
-        </a>
-        <p>For immediate emergency assistance</p>
-        <p> Get quick help in an emergency </p>
-        <button
-         onclick="window.open('https://www.google.com/maps/search/hospitals+near+me')">🏥 Find Nearby Hospital</button>
-        <button 
-        onclick="document.getElementById('contacts').style.display='block'">👥Trusted Contacts</button>
-        <div id="contacts" 
-        style="display:none;">
-        <input type="text"
-        placeholder="Enter trusted person's name">
-        <input type="tel"
-        placeholder="Enter phone number">
-        <button onclick="saveContact()">Save Contact</button>
-</div>
-        <p>Add a trusted person for emergencies</p>
-        <button onclick="alert(' Stay Calm.Move to a safe place and contact emergency services if needed.')">🩹 Safety Guidance</button>
-        <p>Stay calm and move to a safe place.</p>
-        <p>Get simple safety guidance</p>
-        <h1>🚨 Smart Emergency Helper</h1>
-        <h2>Quick Help When You Need It</h2>
-        <p>📍 Find help near your location</p>
-        <button onclick="getLocation()">📍 My Location</button>
-        <script>
-                function getLocation() {
-    if (!navigator.geolocation) {
-        alert("Location is not supported by your browser.");
-        return;
-    }
 
-    navigator.geolocation.getCurrentPosition(
-        function(position) {
-            window.open(
-                "https://www.google.com/maps?q=" +
-                position.coords.latitude + "," +
-                position.coords.longitude
-            );
-        },
-        function(error) {
-            if (error.code === 1) {
-                alert("Location permission is blocked. Please allow Location permission and try again.");
-            } else if (error.code === 2) {
-                alert("Location is unavailable. Please turn on GPS and try again.");
-            } else {
-                alert("Unable to get your location. Please try again.");
+        .hidden {
+            display: none;
+        }
+
+        .result {
+            margin-top: 12px;
+            padding: 12px;
+            background: #f1f5f9;
+            border-radius: 9px;
+            line-height: 1.7;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #777;
+            font-size: 14px;
+        }
+
+        @media (max-width: 650px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 26px;
             }
         }
-    );
-}
-function saveContact() {
-    const name = document.querySelector('#contacts input[type="text"]').value;
-    const phone = document.querySelector('#contacts input[type="tel"]').value;
+    </style>
+</head>
 
-    if (name === "" || phone === "") {
-        alert("Please enter name and phone number.");
-        return;
+<body>
+
+<header>
+    <h1>🚨 Smart Emergency Helper</h1>
+    <p>Quick help and safety support when you need it</p>
+</header>
+
+<div class="container">
+
+    <!-- Emergency -->
+    <div class="emergency">
+        <h2>Emergency Assistance</h2>
+        <p>For immediate emergency assistance, contact emergency services.</p>
+
+        <a href="tel:112">
+            <button onclick="alert('Emergency Number: 112')">
+                🚨 Call Emergency 112
+            </button>
+        </a>
+    </div>
+
+    <div class="grid">
+
+        <!-- Hospital -->
+        <div class="card">
+            <h3>🏥 Nearby Hospital</h3>
+            <p>Find hospitals near your location using Google Maps.</p>
+
+            <button onclick="findHospital()">
+                Find Nearby Hospital
+            </button>
+        </div>
+
+
+        <!-- Location -->
+        <div class="card">
+            <h3>📍 My Location</h3>
+            <p>Open your current location on Google Maps.</p>
+
+            <button onclick="getLocation()">
+                Find My Location
+            </button>
+        </div>
+
+
+        <!-- Trusted Contacts -->
+        <div class="card">
+
+            <h3>👥 Trusted Contacts</h3>
+            <p>Add a trusted person for emergency situations.</p>
+
+            <button onclick="showContacts()">
+                Add Trusted Contact
+            </button>
+
+            <div id="contacts" class="hidden">
+
+                <input
+                    type="text"
+                    id="contactName"
+                    placeholder="Enter trusted person's name">
+
+                <input
+                    type="tel"
+                    id="contactPhone"
+                    placeholder="Enter phone number">
+
+                <button onclick="saveContact()">
+                    💾 Save Contact
+                </button>
+
+            </div>
+
+            <div id="savedContact"></div>
+
+        </div>
+
+
+        <!-- Safety -->
+        <div class="card">
+
+            <h3>🩹 Safety Guidance</h3>
+            <p>Simple steps to follow during an emergency.</p>
+
+            <button onclick="showSafety()">
+                View Safety Guidance
+            </button>
+
+            <div id="safety" class="hidden result">
+
+                🧘 Stay calm.<br>
+                🏃 Move to a safe place.<br>
+                📞 Contact emergency services if needed.<br>
+                👥 Stay with a trusted person.
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<footer>
+    Smart Emergency Helper • Stay Safe • Get Help Quickly
+</footer>
+
+
+<script>
+
+    // Nearby Hospital
+    function findHospital() {
+        window.open(
+            "https://www.google.com/maps/search/hospitals+near+me",
+            "_blank"
+        );
     }
 
-    alert("Trusted contact saved successfully!");
-    document.querySelector('#contacts input[type="text"]').value = "";
-document.querySelector('#contacts input[type="tel"]').value = "";
-}
-        </script>
-    </body>
+
+    // My Location
+    function getLocation() {
+
+        if (!navigator.geolocation) {
+            alert("Location is not supported by your browser.");
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+
+            function(position) {
+
+                window.open(
+                    "https://www.google.com/maps?q=" +
+                    position.coords.latitude + "," +
+                    position.coords.longitude,
+                    "_blank"
+                );
+
+            },
+
+            function(error) {
+
+                if (error.code === 1) {
+                    alert("Location permission is blocked. Please allow Location permission and try again.");
+                }
+                else if (error.code === 2) {
+                    alert("Location is unavailable. Please turn on GPS and try again.");
+                }
+                else {
+                    alert("Unable to get your location. Please try again.");
+                }
+
+            }
+        );
+    }
+
+
+    // Show Contacts
+    function showContacts() {
+        document.getElementById("contacts")
+            .classList.remove("hidden");
+    }
+
+
+    // Save Contact
+    function saveContact() {
+
+        const name =
+            document.getElementById("contactName").value.trim();
+
+        const phone =
+            document.getElementById("contactPhone").value.trim();
+
+        if (name === "" || phone === "") {
+            alert("Please enter name and phone number.");
+            return;
+        }
+
+        localStorage.setItem("trustedName", name);
+        localStorage.setItem("trustedPhone", phone);
+
+        displaySavedContact();
+
+        alert("Trusted contact saved successfully!");
+
+        document.getElementById("contactName").value = "";
+        document.getElementById("contactPhone").value = "";
+    }
+
+
+    // Display Saved Contact
+    function displaySavedContact() {
+
+        const name =
+            localStorage.getItem("trustedName");
+
+        const phone =
+            localStorage.getItem("trustedPhone");
+
+        if (name && phone) {
+
+            document.getElementById("savedContact").innerHTML =
+                '<div class="result">' +
+                '👤 <strong>Saved Contact</strong><br>' +
+                'Name: ' + name + '<br>' +
+                '📞 ' + phone +
+                '</div>';
+
+        }
+    }
+
+
+    // Safety Guidance
+    function showSafety() {
+        document.getElementById("safety")
+            .classList.remove("hidden");
+    }
+
+
+    // Load Saved Contact
+    window.onload = function() {
+        displaySavedContact();
+    };
+
+</script>
+
+</body>
 </html>
