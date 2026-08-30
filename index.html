@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Smart Emergency Helper
+        </title>
+        <meta name="viewport"
+        content="width=device-width,initial-scale=1.0">
+        <style>
+            body {
+                text-align:center;
+                font-family:Arial;
+                font-size: 18px;
+                padding: 30px;
+                background-color:#f5f5f5;
+            }
+            .emergency {
+                background-color : red ;
+                color : white ;
+                padding : 15px 30px ;
+                font-size: 20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px gray;
+                margin: 10px;
+            }
+            button {
+                margin: 10px;
+                cursor: pointer;
+            }
+            button:hover {
+                transform:scale(1.05);
+            }
+            h1 {
+            font-size: 32px;
+        }
+        </style>
+    </head>
+    <body>
+        <a href="tel:112">
+        <button class="emergency" onclick="alert('Emergency Number:112')">🚨Emergency </button>
+        </a>
+        <p>For immediate emergency assistance</p>
+        <p> Get quick help in an emergency </p>
+        <button
+         onclick="window.open('https://www.google.com/maps/search/hospitals+near+me')">🏥 Find Nearby Hospital</button>
+        <button onclick="alert('Please Contact Your Trusted Person')">👥 Trusted Contacts</button>
+        <p>Add a trusted person for emergencies</p>
+        <button onclick="alert(' Stay Calm.Move to a safe place and contact emergency services if needed.')">🩹 Safety Guidance</button>
+        <p>Get simple safety guidance</p>
+        <h1>🚨 Smart Emergency Helper</h1>
+        <h2>Quick Help When You Need It</h2>
+        <p>📍 Find help near your location</p>
+        <button onclick="getLocation()">📍 My Location</button>
+        <script>
+            function getLocation() {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    window.open("https://www.google.com/maps?q=" 
+                    + position.coords.latitude +","
+                     + position.coords.longitude);
+                });
+            }
+        </script>
+    </body>
+</html>
