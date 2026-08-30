@@ -68,7 +68,7 @@
         placeholder="Enter trusted person's name">
         <input type="tel"
         placeholder="Enter phone number">
-        <button onclick="alert('Trusted contact saved successfully!')">Save Contact</button>
+        <button onclick="saveContact()">Save Contact</button>
 </div>
         <p>Add a trusted person for emergencies</p>
         <button onclick="alert(' Stay Calm.Move to a safe place and contact emergency services if needed.')">🩹 Safety Guidance</button>
@@ -79,16 +79,42 @@
         <p>📍 Find help near your location</p>
         <button onclick="getLocation()">📍 My Location</button>
         <script>
-            function getLocation() {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    window.open("https://www.google.com/maps?q=" 
-                    + position.coords.latitude +","
-                     + position.coords.longitude);
-                });
+                function getLocation() {
+    if (!navigator.geolocation) {
+        alert("Location is not supported by your browser.");
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+        function(position) {
+            window.open(
+                "https://www.google.com/maps?q=" +
+                position.coords.latitude + "," +
+                position.coords.longitude
+            );
+        },
+        function(error) {
+            if (error.code === 1) {
+                alert("Location permission is blocked. Please allow Location permission and try again.");
+            } else if (error.code === 2) {
+                alert("Location is unavailable. Please turn on GPS and try again.");
+            } else {
+                alert("Unable to get your location. Please try again.");
             }
-            function showContacts() {
-                document.getElementById("Contacts").style.display = "block;"
-            }
+        }
+    );
+}
+function saveContact() {
+    const name = document.querySelector('#contacts input[type="text"]').value;
+    const phone = document.querySelector('#contacts input[type="tel"]').value;
+
+    if (name === "" || phone === "") {
+        alert("Please enter name and phone number.");
+        return;
+    }
+
+    alert("Trusted contact saved successfully!");
+}
         </script>
     </body>
 </html>
